@@ -4,10 +4,11 @@ RSpec.describe '<%= controller_path %>', type: :request do
   # Authentication setup
   let(:manager) { create_manager }
   let(:Authorization) { "Bearer #{generate_token(manager)}" }
-  let(:valid_attributes) { attributes_for(:<%= path_item[:tag].singularize.downcase %>) }
-  let(:invalid_attributes) { attributes_for(:<%= path_item[:tag].singularize.downcase %>) }
-  let(:<%= path_item[:tag].singularize.downcase %>) { create(:<%= path_item[:tag].singularize.downcase %>) }
-  let(:id) { <%= path_item[:tag].singularize.downcase %>.id }
+  let(:resource_name) { controller_path.singularize }
+  let(:valid_attributes) { attributes_for(resource_name.to_sym) }
+  let(:invalid_attributes) { attributes_for(resource_name.to_sym) }
+  let(:resource) { create(resource_name.to_sym) }
+  let(:id) { resource.id }
 
   # Shared examples for common response patterns
   shared_examples 'requires authentication' do
