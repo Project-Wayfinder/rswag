@@ -56,8 +56,9 @@ RSpec.describe '<%= controller_path %>', type: :request do
         - Required roles: System Admin
       DESC
 
-      <%- case action.to_s -%>
-      <%- when 'list', 'index' -%>
+      <%- operation_type = details[:summary].to_s.split(' ').first -%>
+      <%- case operation_type -%>
+      <%- when 'list' -%>
       # Pagination parameters for index/list endpoints
       parameter name: 'page', in: :query, type: :integer, required: false, description: 'Page number'
       parameter name: 'per_page', in: :query, type: :integer, required: false, description: 'Items per page'
@@ -265,7 +266,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
         end
       end
 
-      <%- when 'destroy', 'delete' -%>
+      <%- when 'delete' -%>
       response(202, 'accepted') do
         include_examples 'requires authentication'
         include_examples 'requires authorization'
