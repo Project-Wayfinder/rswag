@@ -63,13 +63,13 @@ RSpec.describe '<%= controller_path %>', type: :request do
       parameter name: 'page', in: :query, type: :integer, required: false, description: 'Page number'
       parameter name: 'per_page', in: :query, type: :integer, required: false, description: 'Items per page'
       parameter name: :order, in: :query,
-          required: false,
-          default: 'created_at',
-          schema: {
-            type: :string,
-            enum: ['name', '-name', 'created_at', '-created_at']
-          },
-          description: 'Sort order (prefix with - for descending)'
+        required: false,
+        default: 'created_at',
+        schema: {
+          type: :string,
+          enum: ['name', '-name', 'created_at', '-created_at']
+        },
+        description: 'Sort order (prefix with - for descending)'
 
       # Search/filter parameters
       parameter name: 'search', in: :query, type: :string, required: false, description: 'Search query'
