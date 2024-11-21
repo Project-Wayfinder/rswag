@@ -7,7 +7,6 @@ RSpec.describe '<%= controller_path %>', type: :request do
 
   let(:valid_attributes) { attributes_for(:<%= path_item[:tag].singularize.downcase %>) }
   let(:invalid_attributes) { attributes_for(:<%= path_item[:tag].singularize.downcase %>) }
-    let(:valid_attributes) { attributes_for(:<%= path_item[:tag].singularize.downcase, name: nil %>) }
 
   # Shared examples for common response patterns
   shared_examples 'requires authentication' do
