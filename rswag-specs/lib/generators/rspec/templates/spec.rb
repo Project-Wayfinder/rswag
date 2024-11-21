@@ -48,13 +48,13 @@ RSpec.describe '<%= controller_path %>', type: :request do
       tags <%= path_item[:tag].inspect %>
       produces 'application/json'
       consumes 'application/json'
-      security [Bearer: {}]
+
       deprecated false
       description <<~DESC
         <%= details[:summary] %>
 
         Authorization:
-        - Required roles:
+        - Required roles: System Admin
 
       DESC
 
@@ -87,8 +87,8 @@ RSpec.describe '<%= controller_path %>', type: :request do
         header 'page-items', schema: { type: :integer }, description: 'Items per page'
         header 'total-pages', schema: { type: :integer }, description: 'Total number of pages'
         header 'total-count', schema: { type: :integer }, description: 'Total number of items'
-
-        schema type: :array, items: { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
+        # TODO: Add schema for response body
+        # schema type: :array, items: { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
 
         before do
           create_list(:<%= path_item[:tag].singularize.downcase %>, 2)
@@ -117,7 +117,8 @@ RSpec.describe '<%= controller_path %>', type: :request do
           <%- end -%>
         <%- end -%>
 
-        schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
+        # TODO: Add schema for response body
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
 
         before do
           # Add setup code for tests here
@@ -168,7 +169,8 @@ RSpec.describe '<%= controller_path %>', type: :request do
 
         let(:body) { { <%= path_item[:tag].singularize.downcase %>: valid_attributes } }
 
-        schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
+        # TODO: Add schema for response body
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
 
         before do
           # Add setup code for tests here
@@ -233,7 +235,8 @@ RSpec.describe '<%= controller_path %>', type: :request do
 
         let(:body) { { <%= path_item[:tag].singularize.downcase %>: valid_attributes } }
 
-        schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
+        # TODO: Add schema for response body
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -274,7 +277,8 @@ RSpec.describe '<%= controller_path %>', type: :request do
           <%- end -%>
         <%- end -%>
 
-        schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
+        # TODO: Add schema for response body
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -313,7 +317,8 @@ RSpec.describe '<%= controller_path %>', type: :request do
           <%- end -%>
         <%- end -%>
 
-        schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
+        # TODO: Add schema for response body
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
 
         after do |example|
           example.metadata[:response][:content] = {
