@@ -4,9 +4,10 @@ RSpec.describe '<%= controller_path %>', type: :request do
   # Authentication setup
   let(:manager) { create_manager }
   let(:Authorization) { "Bearer #{generate_token(manager)}" }
-
   let(:valid_attributes) { attributes_for(:<%= path_item[:tag].singularize.downcase %>) }
   let(:invalid_attributes) { attributes_for(:<%= path_item[:tag].singularize.downcase %>) }
+  let(:<%= path_item[:tag].singularize.downcase %>) { create(:<%= path_item[:tag].singularize.downcase %>) }
+  let(:id) { <%= path_item[:tag].singularize.downcase %>.id }
 
   # Shared examples for common response patterns
   shared_examples 'requires authentication' do
@@ -31,20 +32,17 @@ RSpec.describe '<%= controller_path %>', type: :request do
 
   before do
     # Add setup code for tests here
-    let(:<%= path_item[:tag].singularize.downcase %>) { create(:<%= path_item[:tag].singularize.downcase %>) }
-    let(:id) { <%= path_item[:tag].singularize.downcase %>.id }
   end
 
-<%  @routes.each do | template, path_item | %>
+  <%- @routes.each do |template, path_item| -%>
   path '<%= template %>.json' do
-
-<%    unless path_item[:params].empty? -%>
-<%      path_item[:params].each do |param| -%>
+    <%- unless path_item[:params].empty? -%>
+      <%- path_item[:params].each do |param| -%>
     parameter name: '<%= param %>', in: :path, type: :string, description: '<%= param %>'
-<%      end -%>
-<%    end -%>
+      <%- end -%>
+    <%- end -%>
 
-<%    path_item[:actions].each do | action, details | %>
+    <%- path_item[:actions].each do |action, details| -%>
     <%= action %>('<%= details[:summary] %>') do
       tags <%= path_item[:tag].inspect %>
       produces 'application/json'
@@ -59,8 +57,8 @@ RSpec.describe '<%= controller_path %>', type: :request do
 
       DESC
 
-<% case action %>
-<% when 'index', 'list' %>
+      <%- case action -%>
+      <%- when 'index', 'list' -%>
       # Pagination parameters for index/list endpoints
       parameter name: 'page', in: :query, type: :integer, required: false, description: 'Page number'
       parameter name: 'per_page', in: :query, type: :integer, required: false, description: 'Items per page'
@@ -75,14 +73,14 @@ RSpec.describe '<%= controller_path %>', type: :request do
 
       # Search/filter parameters
       parameter name: 'search', in: :query, type: :string, required: false, description: 'Search query'
-      # RESTFUL INDEX
+
       response(200, 'successful') do
         include_examples 'requires authentication'
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         header 'current-page', schema: { type: :integer }, description: 'Current page number'
         header 'page-items', schema: { type: :integer }, description: 'Items per page'
@@ -109,15 +107,14 @@ RSpec.describe '<%= controller_path %>', type: :request do
         end
       end
 
-<% when 'show' %>
-      # RESTFUL SHOW
+      <%- when 'show' -%>
       response(200, 'successful') do
         include_examples 'requires authentication'
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
 
@@ -133,22 +130,22 @@ RSpec.describe '<%= controller_path %>', type: :request do
           }
         end
 
-        run_test! do
-          # Add your test code here
-        end
+        run_test!
       end
 
       response(404, 'not found') do
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         schema '$ref' => '#/components/schemas/Error'
+
+        run_test!
       end
-<% when 'create' %>
-      # RESTFUL CREATE
+
+      <%- when 'create' -%>
       parameter name: :body, in: :body, schema: {
         type: :object,
         properties: {
@@ -162,11 +159,11 @@ RSpec.describe '<%= controller_path %>', type: :request do
       response(201, 'created') do
         include_examples 'requires authentication'
         include_examples 'requires authorization'
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         let(:body) { { <%= path_item[:tag].singularize.downcase %>: valid_attributes } }
 
@@ -185,25 +182,20 @@ RSpec.describe '<%= controller_path %>', type: :request do
         end
 
         run_test! do
-          # Add your test code here
           expect(response).to have_http_status(:created)
         end
       end
 
       response(422, 'unprocessable entity') do
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         let(:body) { { <%= path_item[:tag].singularize.downcase %>: invalid_attributes } }
 
         schema '$ref' => '#/components/schemas/Error'
-
-        before do
-          # Add setup code for tests here
-        end
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -214,13 +206,11 @@ RSpec.describe '<%= controller_path %>', type: :request do
         end
 
         run_test! do
-          # Add your test code here
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end
 
-<% when 'update' %>
-      # RESTFUL UPDATE
+      <%- when 'update' -%>
       parameter name: :body, in: :body, schema: {
         type: :object,
         properties: {
@@ -234,20 +224,16 @@ RSpec.describe '<%= controller_path %>', type: :request do
       response(200, 'ok') do
         include_examples 'requires authentication'
         include_examples 'requires authorization'
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         let(:body) { { <%= path_item[:tag].singularize.downcase %>: valid_attributes } }
 
         schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
 
-        before do
-          # Add setup code for tests here
-        end
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -257,56 +243,37 @@ RSpec.describe '<%= controller_path %>', type: :request do
         end
 
         run_test! do
-          # Add your test code here
           expect(response).to have_http_status(:ok)
         end
       end
 
       response(422, 'unprocessable entity') do
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         let(:body) { { <%= path_item[:tag].singularize.downcase %>: invalid_attributes } }
 
         schema '$ref' => '#/components/schemas/Error'
 
-        before do
-          # Add setup code for tests here
-        end
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-
         run_test! do
-          # Add your test code here
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end
 
-<% when 'destroy', 'delete' %>
-      # RESTFUL DESTROY
+      <%- when 'destroy', 'delete' -%>
       response(202, 'accepted') do
         include_examples 'requires authentication'
         include_examples 'requires authorization'
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
-
-        before do
-          # Add setup code for tests here
-        end
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -317,50 +284,35 @@ RSpec.describe '<%= controller_path %>', type: :request do
         end
 
         run_test! do
-          # Add your test code here
           expect(response).to have_http_status(:accepted)
         end
       end
 
       response(404, 'not found') do
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         schema '$ref' => '#/components/schemas/Error'
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-
         run_test! do
-          # Add your test code here
           expect(response).to have_http_status(:not_found)
         end
       end
 
-<% else %>
-      # <%= "#{action.upcase} ACTION" %>
+      <%- else -%>
       response(200, 'successful') do
         include_examples 'requires authentication'
         include_examples 'requires authorization'
-<%      unless path_item[:params].empty? -%>
-<%        path_item[:params].each do |param| -%>
+        <%- unless path_item[:params].empty? -%>
+          <%- path_item[:params].each do |param| -%>
         let(:<%= param %>) { '8d90edfc-44cf-44c6-8632-3bd47120b4cc' }
-<%        end -%>
-<%      end -%>
+          <%- end -%>
+        <%- end -%>
 
         schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase %>' }
-
-        before do
-          # Add setup code for tests here
-        end
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -370,13 +322,11 @@ RSpec.describe '<%= controller_path %>', type: :request do
           }
         end
 
-        run_test! do
-          # Add your test code here
-        end
+        run_test!
       end
-<% end %>
+      <%- end -%>
     end
-<%    end -%>
+    <%- end -%>
   end
-<%  end -%>
+  <%- end -%>
 end
