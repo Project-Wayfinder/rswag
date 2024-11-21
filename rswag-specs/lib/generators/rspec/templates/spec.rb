@@ -48,18 +48,16 @@ RSpec.describe '<%= controller_path %>', type: :request do
       tags <%= path_item[:tag].inspect %>
       produces 'application/json'
       consumes 'application/json'
-
       deprecated false
       description <<~DESC
         <%= details[:summary] %>
 
         Authorization:
         - Required roles: System Admin
-
       DESC
 
-      <%- case action -%>
-      <%- when 'index', 'list' -%>
+      <%- case action.to_s -%>
+      <%- when 'list', 'index' -%>
       # Pagination parameters for index/list endpoints
       parameter name: 'page', in: :query, type: :integer, required: false, description: 'Page number'
       parameter name: 'per_page', in: :query, type: :integer, required: false, description: 'Items per page'
@@ -332,7 +330,9 @@ RSpec.describe '<%= controller_path %>', type: :request do
       end
       <%- end -%>
     end
+
     <%- end -%>
+
   end
   <%- end -%>
 end
