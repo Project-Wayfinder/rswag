@@ -87,10 +87,10 @@ RSpec.describe '<%= controller_path %>', type: :request do
         header 'total-pages', schema: { type: :integer }, description: 'Total number of pages'
         header 'total-count', schema: { type: :integer }, description: 'Total number of items'
         # TODO: Add schema for response body
-        # schema type: :array, items: { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.underscore %>' }
+        # schema type: :array, items: { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>' }
 
         before do
-          create_list(:<%= path_item[:tag].singularize.downcase.underscore %>, 2)
+          create_list(:<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>, 2)
         end
 
         after do |example|
@@ -117,7 +117,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
         <%- end -%>
 
         # TODO: Add schema for response body
-        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.underscore %>' }
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>' }
 
         before do
           # Add setup code for tests here
@@ -150,11 +150,11 @@ RSpec.describe '<%= controller_path %>', type: :request do
       parameter name: :body, in: :body, schema: {
         type: :object,
         properties: {
-          <%= path_item[:tag].singularize.downcase.underscore %>: {
-            '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.underscore %>_input'
+          <%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>: {
+            '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>_input'
           }
         },
-        required: ['<%= path_item[:tag].singularize.downcase.underscore %>']
+        required: ['<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>']
       }
 
       response(201, 'created') do
@@ -166,10 +166,10 @@ RSpec.describe '<%= controller_path %>', type: :request do
           <%- end -%>
         <%- end -%>
 
-        let(:body) { { <%= path_item[:tag].singularize.downcase.underscore %>: valid_attributes } }
+        let(:body) { { <%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>: valid_attributes } }
 
         # TODO: Add schema for response body
-        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.underscore %>' }
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>' }
 
         before do
           # Add setup code for tests here
@@ -195,7 +195,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
           <%- end -%>
         <%- end -%>
 
-        let(:body) { { <%= path_item[:tag].singularize.downcase.underscore %>: invalid_attributes } }
+        let(:body) { { <%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>: invalid_attributes } }
 
         schema '$ref' => '#/components/schemas/Error'
 
@@ -216,11 +216,11 @@ RSpec.describe '<%= controller_path %>', type: :request do
       parameter name: :body, in: :body, schema: {
         type: :object,
         properties: {
-          <%= path_item[:tag].singularize.downcase.underscore %>: {
-            '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.underscore %>_input'
+          <%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>: {
+            '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>_input'
           }
         },
-        required: ['<%= path_item[:tag].singularize.downcase.underscore %>']
+        required: ['<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>']
       }
 
       response(200, 'ok') do
@@ -232,10 +232,10 @@ RSpec.describe '<%= controller_path %>', type: :request do
           <%- end -%>
         <%- end -%>
 
-        let(:body) { { <%= path_item[:tag].singularize.downcase.underscore %>: valid_attributes } }
+        let(:body) { { <%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>: valid_attributes } }
 
         # TODO: Add schema for response body
-        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.underscore %>' }
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -257,7 +257,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
           <%- end -%>
         <%- end -%>
 
-        let(:body) { { <%= path_item[:tag].singularize.downcase.underscore %>: invalid_attributes } }
+        let(:body) { { <%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>: invalid_attributes } }
 
         schema '$ref' => '#/components/schemas/Error'
 
@@ -277,7 +277,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
         <%- end -%>
 
         # TODO: Add schema for response body
-        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.underscore %>' }
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -317,7 +317,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
         <%- end -%>
 
         # TODO: Add schema for response body
-        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.underscore %>' }
+        # schema { '$ref' => '#/components/schemas/<%= path_item[:tag].singularize.downcase.gsub(/\s+/, '_') %>' }
 
         after do |example|
           example.metadata[:response][:content] = {
