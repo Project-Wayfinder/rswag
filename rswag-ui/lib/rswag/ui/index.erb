@@ -107,8 +107,8 @@
               tryItOutEnabled: true,          // Enable "Try it out" feature
               supportedSubmitMethods: [       // HTTP methods that can be "tried out"
                   'get', 'put', 'post',
-                  'delete', 'options',
-                  'head', 'patch', 'trace'
+                  'delete',
+                  'head', 'patch'
               ],
               requestInterceptor: (req) => {  // Modify requests before they're sent
                   // Add custom headers or modify request
@@ -120,6 +120,7 @@
                   console.log('API Response:', res);
                   return res;
               },
+              displayOperationId: true,
 
               // Syntax Highlighting
               syntaxHighlight: {
@@ -142,10 +143,11 @@
               // Performance
               maxDisplayedTags: null,         // Limit number of displayed API tags
               operationsSorter: (a, b) => {   // Custom sorting for operations
-                  const methodsOrder = ['get', 'post', 'put', 'delete', 'patch', 'options', 'trace'];
+                  const methodsOrder = ['get', 'post', 'put', 'delete', 'patch'];
                   return methodsOrder.indexOf(a.get('method')) - methodsOrder.indexOf(b.get('method'));
               },
               tagsSorter: 'alpha',            // Sort tags alphabetically
+              withCredentials: true,
 
               // Plugins and Extensions
               plugins: [
