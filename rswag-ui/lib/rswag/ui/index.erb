@@ -31,10 +31,63 @@
         }
 
         #swagger-ui {
-            max-width: 1460px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0;
         }
+
+        .swagger-ui .topbar {
+          background-color: #3a573f;
+          border-bottom: none;
+        }
+
+        .swagger-ui .opblock-tag {
+          border-bottom: 1px solid rgba(58, 87, 63, 0.3);
+        }
+
+        .swagger-ui .opblock.opblock-get .opblock-summary {
+          border-color: #3a573f;
+        }
+
+        /* GET method styling */
+        .swagger-ui .opblock.opblock-get {
+          border-color: #3a573f;
+          background: rgba(58, 87, 63, 0.05);
+        }
+
+        .swagger-ui .opblock.opblock-get .opblock-summary-method {
+          background: #3a573f;
+        }
+
+        /* Active tab styling */
+        .swagger-ui .tab-header .tab-item.active h4 {
+          color: #3a573f;
+        }
+
+        /* Button styling */
+        .swagger-ui .btn.execute {
+          background-color: #3a573f;
+          border-color: #3a573f;
+        }
+
+        .swagger-ui .btn.authorize {
+          color: #3a573f;
+          border-color: #3a573f;
+        }
+
+        .swagger-ui .btn.authorize svg {
+          fill: #3a573f;
+        }
+
+        /* Links */
+        .swagger-ui a {
+          color: #3a573f;
+        }
+
+        /* Schema styling */
+        .swagger-ui .model-toggle:after {
+          background: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z' fill='%233a573f'/></svg>") 50% no-repeat;
+        }
+
     </style>
 </head>
 <body>
@@ -115,6 +168,8 @@
                   req.headers['X-Request-Source'] = 'swagger-ui';
                   return req;
               },
+              logoUrl: "https://app.withwayfinder.com/",
+              pluginLogoUrl: "/logo.png",
               responseInterceptor: (res) => { // Process responses before display
                   // Add custom response handling
                   console.log('API Response:', res);
