@@ -4,7 +4,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
   let(:manager) { create_manager }
   let(:auth_header) { auth_headers(manager) }
   let(:request_headers) { auth_header }
-  let!(:resource) { create('<%= controller_path.singularize.to_sym %>') }
+  let!(:resource) { create('<%= controller_path.singularize %>'.to_sym) }
   let(:id) { resource.id }
 
   <%- @routes.each do |template, path_item| -%>
@@ -18,7 +18,6 @@ RSpec.describe '<%= controller_path %>', type: :request do
               description: '<%= param.humanize %> UUID'
     <%- end -%>
     <%- end -%>
-
     <%- path_item[:actions].each do |action, details| -%>
     <%= action %>('<%= details[:summary] %>') do
       tags <%= path_item[:tag].inspect %>
@@ -122,7 +121,9 @@ RSpec.describe '<%= controller_path %>', type: :request do
 
       <%- end -%>
     end
+
     <%- end -%>
   end
+
   <%- end -%>
 end
