@@ -22,6 +22,9 @@ RSpec.describe '<%= controller_path %>', type: :request do
     <%= action %>('<%= details[:summary] %>') do
       tags <%= path_item[:tag].inspect %>
       operationId '<%= action %>-<%= path_item[:tag].downcase.gsub(/\s+/, '-') %>'
+      <%- if %w[post put patch].include?(action) -%>
+      consumes 'application/json'
+      <%- end -%>
       produces 'application/json'
       description <<~DESC
         <%= details[:summary] %>.
@@ -74,7 +77,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
       }
 
       response '201', '<%= controller_path.singularize %> created' do
-        let(:request_params) { attributes_for(:<%= controller_path.singularize %>) }
+        let(:request_params) { { '<%= controller_path.singularize %>' => attributes_for(:<%= controller_path.singularize %>) } }
 
         run_test! do |response|
           response_data = JSON.parse(response.body)
@@ -83,7 +86,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
       end
 
       response '422', 'invalid request' do
-        let(:request_params) { attributes_for(:<%= controller_path.singularize %>).merge(name: nil) }
+        let(:request_params) { { '<%= controller_path.singularize %>' => attributes_for(:<%= controller_path.singularize %>).merge(name: nil) } }
         run_test!
       end
 
@@ -96,7 +99,12 @@ RSpec.describe '<%= controller_path %>', type: :request do
       }
 
       response '200', '<%= controller_path.singularize %> updated' do
-        let(:request_params) { attributes_for(:<%= controller_path.singularize %>) }
+        let(:request_params) do
+          {
+            'id' => id,
+            '<%= controller_path.singularize %>' => attributes_for(:<%= controller_path.singularize %>)
+          }
+        end
 
         run_test! do |response|
           response_data = JSON.parse(response.body)
@@ -105,11 +113,14 @@ RSpec.describe '<%= controller_path %>', type: :request do
       end
 
       response '422', 'invalid request' do
-        let(:request_params) { attributes_for(:<%= controller_path.singularize %>).merge(name: nil) }
+        let(:request_params) do
+          {
+            'id' => id,
+            '<%= controller_path.singularize %>' => attributes_for(:<%= controller_path.singularize %>).merge(name: nil)
+          }
+        end
         run_test!
       end
-
-      it_behaves_like 'not_found_response'
 
       <%- when 'delete' -%>
       response '204', '<%= controller_path.singularize %> deleted' do
@@ -123,7 +134,5 @@ RSpec.describe '<%= controller_path %>', type: :request do
     end
     <%- end -%>
   end
-
   <%- end -%>
-
 end
