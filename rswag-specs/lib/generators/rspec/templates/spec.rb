@@ -121,9 +121,9 @@ RSpec.describe '<%= controller_path %>', type: :request do
 
       <%- end -%>
     end
-
     <%- end -%>
   end
 
   <%- end -%>
+
 end
