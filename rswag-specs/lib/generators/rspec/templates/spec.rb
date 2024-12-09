@@ -4,8 +4,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
   let(:manager) { create_manager }
   let(:auth_header) { auth_headers(manager) }
   let(:request_headers) { auth_header }
-  let(:resource_name) { controller_path.singularize }
-  let!(:resource) { create(resource_name.to_sym) }
+  let!(:resource) { create('<%= controller_path.singularize.to_sym %>') }
   let(:id) { resource.id }
 
   <%- @routes.each do |template, path_item| -%>
@@ -56,7 +55,7 @@ RSpec.describe '<%= controller_path %>', type: :request do
       end
 
       <%- when 'show' -%>
-      response '200', '<%= resource_name %> found' do
+      response '200', '<%= controller_path.singularize %> found' do
         let(:request_params) { { 'id' => id } }
 
         run_test! do |response|
@@ -68,15 +67,15 @@ RSpec.describe '<%= controller_path %>', type: :request do
       it_behaves_like 'not_found_response'
 
       <%- when 'create' -%>
-      parameter name: :<%= resource_name %>, in: :body, schema: {
+      parameter name: :<%= controller_path.singularize %>, in: :body, schema: {
         type: :object,
         properties: {
           # TODO: Add properties based on model
         }
       }
 
-      response '201', '<%= resource_name %> created' do
-        let(:request_params) { attributes_for(:<%= resource_name %>) }
+      response '201', '<%= controller_path.singularize %> created' do
+        let(:request_params) { attributes_for(:<%= controller_path.singularize %>) }
 
         run_test! do |response|
           response_data = JSON.parse(response.body)
@@ -85,20 +84,20 @@ RSpec.describe '<%= controller_path %>', type: :request do
       end
 
       response '422', 'invalid request' do
-        let(:request_params) { attributes_for(:<%= resource_name %>).merge(name: nil) }
+        let(:request_params) { attributes_for(:<%= controller_path.singularize %>).merge(name: nil) }
         run_test!
       end
 
       <%- when 'update' -%>
-      parameter name: :<%= resource_name %>, in: :body, schema: {
+      parameter name: :<%= controller_path.singularize %>, in: :body, schema: {
         type: :object,
         properties: {
           # TODO: Add properties based on model
         }
       }
 
-      response '200', '<%= resource_name %> updated' do
-        let(:request_params) { attributes_for(:<%= resource_name %>) }
+      response '200', '<%= controller_path.singularize %> updated' do
+        let(:request_params) { attributes_for(:<%= controller_path.singularize %>) }
 
         run_test! do |response|
           response_data = JSON.parse(response.body)
@@ -107,14 +106,14 @@ RSpec.describe '<%= controller_path %>', type: :request do
       end
 
       response '422', 'invalid request' do
-        let(:request_params) { attributes_for(:<%= resource_name %>).merge(name: nil) }
+        let(:request_params) { attributes_for(:<%= controller_path.singularize %>).merge(name: nil) }
         run_test!
       end
 
       it_behaves_like 'not_found_response'
 
       <%- when 'delete' -%>
-      response '204', '<%= resource_name %> deleted' do
+      response '204', '<%= controller_path.singularize %> deleted' do
         let(:request_params) { { 'id' => id } }
         run_test!
       end
